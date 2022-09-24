@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
 import Web3 from 'web3';
-import Token from '../abis/Token.json';
+import {connect} from 'react-redux';
+import {
+	loadWeb3,
+	loadAccount,
+	loadToken,
+	loadExchange
+} from '../store/interactions';
 
 class App extends Component {
   componentWillMount() {
-  	this.loadBlockchainData()
+  	this.loadBlockchainData(this.props.dispatch)
   }
 
-  async loadBlockchainData() {
-  	const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
-  	const network = await web3.eth.net.getNetworkType()
-  	const networkId = await web3.eth.net.getId()
-  	//console.log('networkId', networkId)
-  	const accounts = await web3.eth.getAccounts()
+  async loadBlockchainData(dispatch) {
   	try {
       // 请求用户授权
       await window.ethereum.enable();
@@ -21,13 +22,18 @@ class App extends Component {
       // 用户不授权时
       console.error("User denied account access")
     }
+
+  	const web3 = loadWeb3(dispatch)
+  	const network = await web3.eth.net.getNetworkType()
+  	const networkId = await web3.eth.net.getId()
+  	//console.log('networkId', networkId)
+  	const accounts = await loadAccount(web3, dispatch)
     //const abi = Token.abi
     //const networks = Token.networks
     //console.log('abi', Token.abi)
   	//console.log('address', Token.networks[networkId].address)
-  	const token = new web3.eth.Contract(Token.abi, Token.networks[networkId].address)
-  	const totalSupply = await token.methods.totalSupply().call()
-  	console.log('totalSupply', totalSupply)
+  	const token = loadToken(web3, networkId, dispatch)
+  	loadExchange(web3, networkId, dispatch)
   }
 
   render() {
@@ -63,5 +69,13 @@ class App extends Component {
 }
 
 
-export default App
+//export default App
 
+//connect App to redux
+function mapStateToProps(state) {
+	return {
+
+	}
+}
+
+export default connect(mapStateToProps)(App)
