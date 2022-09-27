@@ -1,4 +1,10 @@
 //handle all of blockchain interations
+
+/*
+  用户的交互函数
+  会通过dispatch触发相应的actions
+*/
+
 import Web3 from 'web3';
 import {
 	web3Loaded,
