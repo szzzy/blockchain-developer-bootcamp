@@ -14,14 +14,17 @@ import { contractsLoadedSelector } from '../store/selectors';
 
 
 class App extends Component {
-  componentWillMount() {
+  //componentWillMount
+  componentDidMount() {
   	this.loadBlockchainData(this.props.dispatch)
   }
 
   async loadBlockchainData(dispatch) {
   	try {
       // 请求用户授权
-      await window.ethereum.enable();
+      //await window.ethereum.enable();
+      //await ethereum.send('eth_requestAccounts');
+      await window.ethereum.request({ method: 'eth_requestAccounts' })
     } catch (error) {
       // 用户不授权时
       console.error("User denied account access")
@@ -32,6 +35,7 @@ class App extends Component {
   	const networkId = await web3.eth.net.getId()
   	//console.log('networkId', networkId)
   	const accounts = await loadAccount(web3, dispatch)
+  	
     //const abi = Token.abi
     //const networks = Token.networks
     //console.log('abi', Token.abi)
@@ -49,7 +53,7 @@ class App extends Component {
   }
 
   render() {
-  	console.log(this.props.account)
+  	//console.log(this.props.account)
     return (
     	<div>
 			<Navbar />
