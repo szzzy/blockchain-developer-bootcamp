@@ -5,6 +5,21 @@ import {
 	filledOrdersSelector
 } from '../store/selectors'
 
+const showFilledOrders = (filledOrders) => {
+	return(
+		<tbody>
+			{ filledOrders.map((order) => {
+				return(
+					<tr>
+						<td>Foo</td>
+						<td>Bar</td>
+						<td>BB</td>
+					</tr>
+				)
+			}) }
+		</tbody>
+	)
+}
 
 class Trades extends Component {
 	render() {
@@ -21,11 +36,7 @@ class Trades extends Component {
 								<th>Time</th>
 								<th>DAPP</th>
 								<th>DAPP/ETH</th>
-								<tr>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
+								{ this.props.filledOrdersLoaded ? showFilledOrders(this.props.filledOrders) : <tbody></tbody> }
 							</tr>
 						</thead>
 					</table>

@@ -10,7 +10,7 @@
 import { get } from 'lodash'
 import { createSelector } from 'reselect'
 import moment from 'moment'
-import { ETHER_ADDRESS, ether, tokens } from '../helpers'
+import { ETHER_ADDRESS, GREEN, RED, ether, tokens } from '../helpers'
 
 const account = state => get(state, 'web3.account')//prevent error that web3 don't exist
 export const accountSelector = createSelector(account, (account) => { return account })//完整写法
@@ -44,15 +44,18 @@ export const filledOrdersSelector = createSelector(
 		orders = decorateFilledOrders(orders)
 		//Sort orders by date descending for display
 		orders = orders.sort((a,b) => b.timestamp - a.timestamp)
-		console.log(orders)
+		return orders
 	}
 )
 
 const decorateFilledOrders = (orders) => {
+	//Track previous order to compare history
+	let previousOrder = orders[0]
 	return(
 		orders.map((order) => {
 			order = decorateOrder(order)
-			order = decorateFilledOrder(order)
+			order = decorateFilledOrder(order, previousOrder)
+			previousOrder = order //update the previous order once it's decorated
 			return order
 		})
 	)
@@ -84,14 +87,24 @@ const decorateOrder = (order) => {
 	})
 }
 
-const decorateFilledOrder = (order) => {
+const decorateFilledOrder = (order, previousOrder) => {
 	return ({
 		...order,
-		tokenPriceClass: tokenPriceClass(order.tokenPrice, order.id)
+		tokenPriceClass: tokenPriceClass(order.tokenPrice, order.id, previousOrder)
 	})
 }
 
-const tokenPriceClass = (tokenPrice, tokenId) => {
+const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
+	//Show green price if only one order exists
+	if(previousOrder.id === orderId) {
+		return GREEN
+	}
+
 	//Show green price if order price higher than previous order
 	//Show red price if order price lower than previous order
+	if(previousOrder.tokenPrice <= tokenPrice) {
+		return GREEN //'success' class in bootstrap
+	} else {
+		return RED //danger
+	}
 }
