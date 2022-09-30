@@ -33,7 +33,7 @@ class Trades extends Component {
 						Trades
 					</div>
 
-					<div className="card-body">
+					<div className="card-body filled-order">
 						<table className="table table-dark table-sm small">
 							<thead>
 								<tr>
