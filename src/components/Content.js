@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { exchangeSelector } from '../store/selectors';
 import { loadAllOrders } from '../store/interactions';
+import Trades from './Trades'; //Trades is default export
 
 class Content extends Component {
 
@@ -71,15 +72,7 @@ class Content extends Component {
 				</div>
 
 				<div className="vertical">
-					<div className="card bg-dark text-white">
-						<div className="card-header">
-							card title6
-						</div>
-						<div className="card-body">
-							<p className="card-text">some content6</p>
-							<a href="/#" className="card-link">card-link6</a>
-						</div>
-					</div>
+					<Trades />
 				</div>
 
 			</div>

@@ -10,6 +10,7 @@
 
   还可以用于选择器Selector
   这里往state里添加，Selector可以获取到里面的数据
+  比如get(state, 'exchange.filledOrders.loaded', false)
 */
 
 
