@@ -186,3 +186,29 @@ const decorateOrderBookOrder = (order) => {
 		orderFillClass: (orderType === 'buy' ? 'sell' : 'buy')
 	})
 }
+
+//for MyTransactions.js
+export const myFilledOrdersLoadedSelector = createSelector(filledOrdersLoaded, loaded => loaded)
+
+export const myFilledOrdersSelector = createSelector(
+	account,
+	filledOrders,
+	(account, filledOrders) => {
+		//find our orders
+		orders = orders.filter((o) => {o.user === account || o.userFill ===account})
+		//sort by date ascending
+		orders = orders.sort((a, b) => a.timestamp - b.timestamp)
+		//decorate orders - add display attributes
+		orders = decorateMyFilledOrders(orders, account)
+	}
+)
+
+const decorateMyFilledOrders = (orders, account) => {
+	return(
+		orders.map((order) => {
+			order = decorateOrder(order)
+			order = decorateMyFilledOrder(order, account)
+			return(order)
+		})
+	)
+}

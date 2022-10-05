@@ -4,6 +4,7 @@ import { exchangeSelector } from '../store/selectors';
 import { loadAllOrders } from '../store/interactions';
 import OrderBook from './OrderBook';
 import Trades from './Trades'; //Trades is default export
+import MyTransactions from './MyTransactions';
 
 class Content extends Component {
 
@@ -51,15 +52,9 @@ class Content extends Component {
 							<a href="/#" className="card-link">card link4</a>
 						</div>
 					</div>
-					<div className="card bg-dark text-white">
-						<div className="card-header">
-							card titile5
-						</div>
-						<div className="card-body">
-							<p className="card-text">some content5</p>
-							<a href="/#" className="card-link">card-link5</a>
-						</div>
-					</div>
+					
+					<MyTransactions />
+
 				</div>
 
 				<Trades />
