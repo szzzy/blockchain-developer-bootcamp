@@ -7,7 +7,7 @@
   这样可以用{this.props.account}读取数据
 */
 
-import { get, reject, groupBy } from 'lodash'
+import { get, reject, groupBy, maxBy, minBy } from 'lodash'
 import { createSelector } from 'reselect'
 import moment from 'moment'
 import { ETHER_ADDRESS, GREEN, RED, ether, tokens } from '../helpers'
@@ -193,13 +193,14 @@ export const myFilledOrdersLoadedSelector = createSelector(filledOrdersLoaded, l
 export const myFilledOrdersSelector = createSelector(
 	account,
 	filledOrders,
-	(account, filledOrders) => {
+	(account, orders) => {
 		//find our orders
-		orders = orders.filter((o) => {o.user === account || o.userFill ===account})
+		orders = orders.filter((o) => o.user === account || o.userFill ===account)
 		//sort by date ascending
 		orders = orders.sort((a, b) => a.timestamp - b.timestamp)
 		//decorate orders - add display attributes
 		orders = decorateMyFilledOrders(orders, account)
+		return orders
 	}
 )
 
@@ -211,4 +212,110 @@ const decorateMyFilledOrders = (orders, account) => {
 			return(order)
 		})
 	)
+}
+
+const decorateMyFilledOrder = (order, account) => {
+	const myOrder = order.user === account
+
+	let orderType
+	if(myOrder) {
+		orderType = order.tokenGive === ETHER_ADDRESS ? 'buy' : 'sell'
+	} else {
+		orderType = order.tokenGive === ETHER_ADDRESS ? 'sell' : 'buy'
+	}
+
+	return({
+		...order,
+		orderType,
+		orderTypeClass: (orderType === 'buy' ? GREEN : RED),
+		orderSign: (orderType === 'buy' ? '+' : '-')
+	})
+}
+
+export const myOpenOrdersLoadedSelector = createSelector(orderBookLoaded, loaded => loaded)
+
+export const myOpenOrderSelector = createSelector(
+	account,
+	openOrders,
+	(account, orders) => {
+		//find our orders
+		orders = orders.filter((o) => o.user === account)
+		//decorate orders - add display attributes
+		orders = decorateMyOpenOrders(orders, account)
+		//sort by date ascending
+		orders = orders.sort((a, b) => b.timestamp - a.timestamp)
+		return orders
+	}
+)
+
+const decorateMyOpenOrders = (orders, account) => {
+	return(
+		orders.map((order) => {
+			order = decorateOrder(order)
+			order = decorateMyOpenOrder(order, account)
+			return(order)
+		})
+	)
+}
+
+const decorateMyOpenOrder = (order, account) => {
+	let orderType = order.tokenGive === ETHER_ADDRESS ? 'buy' : 'sell'
+
+	return({
+		...order,
+		orderType,
+		orderTypeClass: (orderType === 'buy' ? GREEN : RED),
+	})
+}
+
+//PriceChart.js
+export const priceChartLoadedSelector = createSelector(filledOrdersLoaded, loaded => loaded)
+
+export const priceChartSelector = createSelector(
+	filledOrders,
+	(orders) => {
+		//sort orders by date ascending to compare history
+		orders = orders.sort((a,b) => a.timestamp - b.timestamp)
+		//decorate orders - add display attributes
+		orders = orders.map((o) => decorateOrder(o))
+		//let last 2 order for final price & price change
+		let secondLastOrder, lastOrder
+		[secondLastOrder, lastOrder] = orders.slice(orders.length - 2, orders.length)
+		//get last order price
+		const lastPrice = get(lastOrder, 'tokenPrice', 0)
+		//get second last order price
+		const secondLastPrice = get(secondLastOrder, 'tokenPrice', 0)
+
+		return({
+			lastPrice,
+			lastPriceChange: (lastPrice >= secondLastPrice ? '+' : '-'),
+			series: [{
+				data: buildGraphData(orders)
+			}]
+		})
+	}
+)
+
+const buildGraphData = (orders) => {
+	// Group the orders by hour for graph
+	orders = groupBy(orders, (o) => moment.unix(o.timestamp).startOf('hour').format())
+	//get each hour where data exists
+	const hours = Object.keys(orders)
+	//会返回一个由一个给定对象的自身可枚举属性组成的数组，也就是说hours包含的值能够作为key遍历orders
+	//build the graph series
+	const graphData = hours.map((hour) => {
+		//fetch all the orders from current hour
+		const group = orders[hour]
+		//calculate price values - open, high, low, close
+		const open = group[0] // first order
+		const high = maxBy(group, 'tokenPrice') // high price
+		const low = minBy(group, 'tokenPrice') // low price
+		const close = group[group.length - 1] // last order
+
+		return({
+			x: new Date(hour),
+			y: [open.tokenPrice, high.tokenPrice, low.tokenPrice, close.tokenPrice]
+		})
+	})
+	return graphData
 }

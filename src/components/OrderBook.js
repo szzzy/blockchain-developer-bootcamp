@@ -33,7 +33,7 @@ const showOrderBook = (props) => {
 
 class OrderBook extends Component {
 	render() {
-		console.log(this.props.orderBookLoaded, this.props.orderBook)
+		//console.log(this.props.orderBookLoaded, this.props.orderBook)
 		return (
 			<div className="vertical">
 				<div className="card bg-dark text-white">
