@@ -6,15 +6,16 @@ import OrderBook from './OrderBook';
 import Trades from './Trades'; //Trades is default export
 import MyTransactions from './MyTransactions';
 import PriceChart from './PriceChart';
+import Balance from './Balance';
 
 class Content extends Component {
 
 	componentDidMount() {
-		this.loadBlockchainData(this.props)
+		this.loadBlockchainData()
 	}
 
-	async loadBlockchainData(props) {
-		const { dispatch, exchange } = props
+	async loadBlockchainData() {
+		const { dispatch, exchange } = this.props
 		await loadAllOrders(exchange, dispatch)
 		await subscribeToEvents(exchange, dispatch)
 	}
@@ -23,15 +24,7 @@ class Content extends Component {
 		return (
 			<div className="content">
 				<div className="vertical-split">
-					<div className="card bg-dark text-white">
-						<div className="card-header">
-							Card Title
-						</div>
-						<div className="card-body">
-							<p className="card-text">some example i am from china so i love you why don't you show me your face</p>
-							<a href="/#" className="card-link">card link</a>
-						</div>
-					</div>
+					<Balance />
 					<div className="card bg-dark text-white">
 						<div className="card-header">
 							card titile2

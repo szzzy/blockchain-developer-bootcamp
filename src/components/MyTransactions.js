@@ -102,7 +102,7 @@ function mapStateToProps(state) {
 		myOpenOrder: myOpenOrderSelector(state),
 		myOpenOrdersLoaded: myOpenOrdersLoadedSelector(state)
 	})*/
-	const myOpenOrdersLoaded = myFilledOrdersLoadedSelector(state)
+	const myOpenOrdersLoaded = myOpenOrdersLoadedSelector(state)
 	const orderCancelling = orderCancellingSelector(state)
 	return {
 		myFilledOrders: myFilledOrdersSelector(state),

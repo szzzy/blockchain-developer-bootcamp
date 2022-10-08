@@ -14,3 +14,10 @@ export const tokens = (n) => ether(n)
 
 export const GREEN = 'success'
 export const RED = 'danger'
+
+export const formatBalance = (balance) => {
+	const precision = 100
+	balance = ether(balance)
+	balance = Math.round(balance * precision) / precision //use 2 decimal place
+	return balance
+}
