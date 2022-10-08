@@ -60,6 +60,20 @@ function exchange(state = {}, action) {
 					]
 				}
 			}
+		case 'ORDER_FILLING':
+			return { ...state, orderFilling: true }
+		case 'ORDER_FILLED':
+			return {
+				...state,
+				orderFilling: false,
+				filledOrders: {
+					...state.filledOrders,
+					data: [
+						...state.filledOrders.data,
+						action.order
+					]
+				}
+			}
 		default:
 			return state
 	}
