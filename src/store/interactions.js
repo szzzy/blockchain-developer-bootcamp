@@ -22,7 +22,8 @@ import {
 	tokenBalanceLoaded,
 	exchangeEtherBalanceLoaded,
 	exchangeTokenBalanceLoaded,
-	balancesLoaded
+	balancesLoaded,
+	balancesLoading
 } from './actions';
 import Token from '../abis/Token.json';
 import Exchange from '../abis/Exchange.json';
@@ -98,6 +99,9 @@ export const cancelOrder = (dispatch, exchange, order, account) =>{
 	})
 }
 
+// 订阅事件, 当事件发生变化时, 我们会收到该消息，并且重新加载
+//subscribe to events to reload the page or reload the component
+//any time the status change, update the status with the event that was triggered
 export const subscribeToEvents = async (exchange, dispatch) => {
 	exchange.events.Cancel({}, (error, event) => {
 		dispatch(orderCancelled(event.returnValues))
@@ -105,6 +109,14 @@ export const subscribeToEvents = async (exchange, dispatch) => {
 
 	exchange.events.Trade({}, (error, event) => {
 		dispatch(orderFilled(event.returnValues))
+	})
+
+	exchange.events.Deposit({}, (error, event) => {
+		dispatch(balancesLoaded())
+	})
+
+	exchange.events.Withdraw({}, (error, event) => {
+		dispatch(balancesLoaded())
 	})
 }
 
@@ -139,4 +151,26 @@ export const loadBalances = async (dispatch, web3, exchange, token, account) => 
 
 	//Trigger all balances loaded
 	dispatch(balancesLoaded())
+}
+
+export const depositEther = (dispatch, exchange, web3, amount, account) => {
+	exchange.methods.depositEther().send({ from: account, value: web3.utils.toWei(amount, 'ether') })
+	.on('transactionHash', (hash) => {
+		dispatch(balancesLoading())
+	})
+	.on('error', (error) => {
+		console.error(error)
+		window.alert(`There was an error in depositting ether`)
+	})
+}
+
+export const withdrawEther = (dispatch, exchange, web3, amount, account) => {
+	exchange.methods.withdrawEther(web3.utils.toWei(amount, 'ether').send({ from: account })
+	.on('transactionHash', (hash) => {
+		dispatch(balancesLoading())
+	})
+	.on('error', (error) => {
+		console.error(error)
+		window.alert(`There was an error in withdrawing ether`)
+	})
 }
