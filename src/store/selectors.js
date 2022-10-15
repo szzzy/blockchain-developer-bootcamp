@@ -375,3 +375,9 @@ export const etherDepositAmountSelector = createSelector(etherDepositAmount, amo
 
 const etherWithdrawAmount = state => get(state, 'exchange.etherWithdrawAmount', null)
 export const etherWithdrawAmountSelector = createSelector(etherWithdrawAmount, amount => amount)
+
+const tokenDepositAmount = state => get(state, 'exchange.tokenDepositAmount', null)
+export const tokenDepositAmountSelector = createSelector(tokenDepositAmount, amount => amount)
+
+const tokenWithdrawAmount = state => get(state, 'exchange.tokenWithdrawAmount', null)
+export const tokenWithdrawAmountSelector = createSelector(tokenWithdrawAmount, amount => amount)

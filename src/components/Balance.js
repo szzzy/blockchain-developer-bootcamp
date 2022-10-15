@@ -13,17 +13,24 @@ import {
 	exchangeEtherBalanceSelector,
 	exchangeTokenBalanceSelector,
 	etherDepositAmountSelector,
-	etherWithdrawAmountSelector
+	etherWithdrawAmountSelector,
+	tokenDepositAmountSelector,
+	tokenWithdrawAmountSelector,
 } from '../store/selectors'
 import {
 	loadBalances,
 	depositEther,
 	withdrawEther,
+	depositToken,
+	withdrawToken,
 } from '../store/interactions'
 import {
 	etherDepositAmountChanged,
-	etherWithdrawAmountChanged
+	etherWithdrawAmountChanged,
+	tokenDepositAmountChanged,
+	tokenWithdrawAmountChanged,
 } from '../store/actions'
+
 
 const showForm = (props) => {
 	const {
@@ -32,12 +39,14 @@ const showForm = (props) => {
 		exchangeEtherBalance,
 		exchangeTokenBalance,
 		dispatch,
-		etherDepositAmount,
 		exchange,
 		token,
 		account,
 		web3,
-		etherWithdrawAmount
+		etherDepositAmount,
+		etherWithdrawAmount,
+		tokenDepositAmount,
+		tokenWithdrawAmount,
 	} = props
 
 	return(
@@ -60,6 +69,24 @@ const showForm = (props) => {
 					</tbody>
 				</table>
 
+				<form className="row" onSubmit={(event) => {
+					event.preventDefault()
+					depositEther(dispatch, exchange, web3, etherDepositAmount, account)
+					//console.log("form submitting...")
+				}}>
+					<div className="col-12 col-sm pr-sm-2">
+						<input
+						type="text"
+						placeholder="ETH Amount"
+						onChange={(e) => dispatch( etherDepositAmountChanged(e.target.value) )}
+						className="form-control form-control-sm bg-dark text-white"
+						required />
+					</div>
+					<div className="col-12 col-sm-auto pl-sm-0">
+						<button type="submit" className="btn btn-primary btn-block btn-sm">Deposit</button>
+					</div>
+				</form>
+
 				<table className="table table-dark table-sm small">
 					<tbody>
 						<tr>
@@ -72,14 +99,13 @@ const showForm = (props) => {
 
 				<form className="row" onSubmit={(event) => {
 					event.preventDefault()
-					depositEther(dispatch, exchange, web3, etherDepositAmount, account)
-					//console.log("form submitting...")
+					depositToken(dispatch, exchange, web3, token, tokenDepositAmount, account)
 				}}>
 					<div className="col-12 col-sm pr-sm-2">
 						<input
 						type="text"
-						placeholder="ETH Amount"
-						onChange={(e) => dispatch( etherDepositAmountChanged(e.target.value) )}
+						placeholder="DAPP Amount"
+						onChange={(e) => dispatch( tokenDepositAmountChanged(e.target.value) )}
 						className="form-control form-control-sm bg-dark text-white"
 						required />
 					</div>
@@ -110,7 +136,7 @@ const showForm = (props) => {
 
 				<form className="row" onSubmit={(event) => {
 					event.preventDefault()
-					withdrawEther(dispatch, exchange, web3, etherDepositAmount, account)
+					withdrawEther(dispatch, exchange, web3, etherWithdrawAmount, account)
 					//console.log("form submitting...")
 				}}>
 					<div className="col-12 col-sm pr-sm-2">
@@ -135,6 +161,23 @@ const showForm = (props) => {
 						</tr>
 					</tbody>
 				</table>
+
+				<form className="row" onSubmit={(event) => {
+					event.preventDefault()
+					withdrawToken(dispatch, exchange, web3, token, tokenWithdrawAmount, account)
+				}}>
+					<div className="col-12 col-sm pr-sm-2">
+						<input
+						type="text"
+						placeholder="DAPP Amount"
+						onChange={(e) => dispatch( tokenWithdrawAmountChanged(e.target.value) )}
+						className="form-control form-control-sm bg-dark text-white"
+						required />
+					</div>
+					<div className="col-12 col-sm-auto pl-sm-0">
+						<button type="submit" className="btn btn-primary btn-block btn-sm">Withdraw</button>
+					</div>
+				</form>
 
 			</Tab>
 		</Tabs>
@@ -182,6 +225,8 @@ function mapStateToProps(state) {
 		showForm: !balancesLoading,
 		etherDepositAmount: etherDepositAmountSelector(state),
 		etherWithdrawAmount: etherWithdrawAmountSelector(state),
+		tokenDepositAmount: tokenDepositAmountSelector(state),
+		tokenWithdrawAmount: tokenWithdrawAmountSelector(state),
 	}
 }
 
