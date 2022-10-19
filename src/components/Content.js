@@ -7,6 +7,7 @@ import Trades from './Trades'; //Trades is default export
 import MyTransactions from './MyTransactions';
 import PriceChart from './PriceChart';
 import Balance from './Balance';
+import NewOrder from './NewOrder';
 
 class Content extends Component {
 
@@ -25,15 +26,7 @@ class Content extends Component {
 			<div className="content">
 				<div className="vertical-split">
 					<Balance />
-					<div className="card bg-dark text-white">
-						<div className="card-header">
-							card titile2
-						</div>
-						<div className="card-body">
-							<p className="card-text">some content2</p>
-							<a href="/#" className="card-link">card-link</a>
-						</div>
-					</div>
+					<NewOrder />
 				</div>
 
 				<OrderBook />
