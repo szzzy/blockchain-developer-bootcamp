@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+# blockchain-developer-bootcamp
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+一个blockchain开发的小demo dapp，只能说是体验一下dapp的开发流程
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+整个教程solidity合约编写的部分很少，感觉更像一个react前端教程（
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+总之不推荐，视频太久远了，坑很多。
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+整了很久，dapp本地是实现了，但是最后部署到goerli测试网上的部分寄了
 
-### `npm run build`
+最后部署的时候，在truffle-config.js报错：`Error: Could not create addresses from your mnemonic or private key(s). Please check that your inputs are correct.`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+    goerli: {
+      provider: function() {
+        return new HDWalletProvider({
+          //Private Key
+          privateKeys: privateKeys, //array of account private keys
+          providerOrUrl: `https://goerli.infura.io/v3/${infuraApiKey}`  //Url to Etherum Node
+        })
+      },
+      gas: 5000000,
+      gasPrice: 25000000000,
+      network_id: 5,
+    },
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+我感觉代码没有问题，估计是包之间依赖版本的问题，懒得弄了
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+断断续续写了两个月左右，打算到这里就结束了，不更新了
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+视频教程：[区块链开发训练营(从0教你开发dapp)_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV153411N7to/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click&vd_source=a4188fa41affd328ccd5e9743098a6e0)
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+部分参考：[Linhieng/learn-dapp (github.com)](https://github.com/Linhieng/learn-dapp)
