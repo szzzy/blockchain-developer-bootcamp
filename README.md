@@ -58,7 +58,9 @@ goerli: {
 合约链上地址
 
 > Exchange: 0xEc1d50b271e19Ef68090e296f110246bb2C5e88C
+>
 > Migrations: 0x598167e8386f18cfe99085Da17fE09624Ef59bb0
+>
 > Token: 0xA4c6Dd587Cf6046DeB3EB7A8F7D77d13A414B8bb
 
 最终选择部署到heroku上
