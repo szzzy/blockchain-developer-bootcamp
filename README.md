@@ -37,7 +37,7 @@ goerli: {
 
 
 
-修好了，添加networkCheckTimeout，包换成truffle-hdwallet-provider，成功部署
+修好了，添加networkCheckTimeout，包换成truffle-hdwallet-provider，成功部署到goerli测试网
 
 ```js
 const HDWalletProvider = require('truffle-hdwallet-provider')
