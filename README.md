@@ -10,17 +10,17 @@
 
 
 
-整了很久，dapp本地是实现了，但是最后部署到goerli测试网上的部分寄了
+~~整了很久，dapp本地是实现了，但是最后部署到goerli测试网上的部分寄了~~
 
-最后部署的时候，在truffle-config.js报错：`Error: Could not create addresses from your mnemonic or private key(s). Please check that your inputs are correct.`
+~~最后部署的时候，在truffle-config.js报错：`Error: Could not create addresses from your mnemonic or private key(s). Please check that your inputs are correct.`~~
 
 ```js
-    goerli: {
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+goerli: {
       provider: function() {
         return new HDWalletProvider({
-          //Private Key
-          privateKeys: privateKeys, //array of account private keys
-          providerOrUrl: `https://goerli.infura.io/v3/${infuraApiKey}`  //Url to Etherum Node
+          privateKeys: privateKeys,
+          providerOrUrl: `https://goerli.infura.io/v3/${infuraApiKey}`
         })
       },
       gas: 5000000,
@@ -29,11 +29,47 @@
     },
 ```
 
-我感觉代码没有问题，估计是包之间依赖版本的问题，懒得弄了
+~~我感觉代码没有问题，估计是包之间依赖版本的问题，懒得弄了~~
+
+~~断断续续写了两个月左右，打算到这里就结束了，不更新了~~
 
 
 
-断断续续写了两个月左右，打算到这里就结束了，不更新了
+
+
+修好了，添加networkCheckTimeout，包换成truffle-hdwallet-provider，成功部署
+
+```js
+const HDWalletProvider = require('truffle-hdwallet-provider')
+goerli: {
+      networkCheckTimeout: 60000,
+      provider: function() {
+        return new HDWalletProvider(
+          privateKeys,
+          `https://goerli.infura.io/v3/${infuraApiKey}`
+        )
+      },
+      gas: 5000000,
+      gasPrice: 25000000000,
+      network_id: 5,
+    },
+```
+
+合约链上地址
+
+> Exchange: 0xEc1d50b271e19Ef68090e296f110246bb2C5e88C
+> Migrations: 0x598167e8386f18cfe99085Da17fE09624Ef59bb0
+> Token: 0xA4c6Dd587Cf6046DeB3EB7A8F7D77d13A414B8bb
+
+最终选择部署到heroku上
+
+https://dapp-exchange-bootcamp.herokuapp.com/
+
+![view](./public/view.png)
+
+done（2022.11.21）
+
+
 
 
 
