@@ -16,6 +16,7 @@ import { contractsLoadedSelector } from '../store/selectors';
 class App extends Component {
   //componentWillMount
   componentDidMount() {
+    document.title = 'DApp Token Exchange'
   	this.loadBlockchainData(this.props.dispatch)
   }
 
