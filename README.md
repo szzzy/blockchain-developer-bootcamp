@@ -65,6 +65,8 @@ goerli: {
 
 https://dapp-exchange-bootcamp.herokuapp.com/
 
+由于用的免费版，访问可能会很卡顿，并且有时候会休眠，得等它被唤醒（
+
 ![view](./public/view.png)
 
 done（2022.11.21）
